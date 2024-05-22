@@ -43,7 +43,7 @@ public class ChargeCardService implements IChargeCardService{
 
        this.creditCardRepository.save(carBalance);
         var transactionPersist = TransactionEntity.builder()
-                .typeTransaction(TypeTransaction.Activar_Tarjeta)
+                .typeTransaction(TypeTransaction.Recargar_saldo)
                 .descriptionTransaction("The Balance was charge  succesfull !!! ")
                 .stateTransaccion(CreditCardProcess.sucess)
                 .valueTransaction(total)

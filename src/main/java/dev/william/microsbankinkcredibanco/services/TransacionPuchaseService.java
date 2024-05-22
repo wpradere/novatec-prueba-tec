@@ -53,7 +53,7 @@ public class TransacionPuchaseService implements ITransactionPuchase{
             this.transactionRepository.save(transactionPersist);
         }else {
             var transactionPersist = TransactionEntity.builder()
-                    .typeTransaction(TypeTransaction.Activar_Tarjeta)
+                    .typeTransaction(TypeTransaction.Compra)
                     .descriptionTransaction("The purchase was successful !!! ")
                     .stateTransaccion(CreditCardProcess.sucess)
                     .valueTransaction(request.getPrice())

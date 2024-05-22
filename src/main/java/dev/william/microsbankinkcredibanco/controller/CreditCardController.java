@@ -22,6 +22,8 @@ public class CreditCardController {
     private final IChargeCardService chargeCardService;
     private final ICheckBlance checkBlance;
     private final ITransactionPuchase transactionPuchase;
+    private final  IConsultTransaction consultTransaction;
+    private final IAnulaTrans anulacionTrans;
 
     @GetMapping("/create")
     public ResponseEntity<GenerateCardResponse> insertar (@RequestBody GenerateCardRequest request/*,@PathVariable Long productId*/){
@@ -63,5 +65,17 @@ public class CreditCardController {
     @PostMapping("/transaction/puchase")
     public ResponseEntity<TransactionPuchaseResponse> activateC ( @RequestBody TransactionPuchaseRequest  request ){
     return ResponseEntity.ok(transactionPuchase.createTransaction(request));
+    }
+    @GetMapping("/transaction/{transactionid}")
+    public ResponseEntity<ConsultTransactionResponse>checkTrnasaction( @PathVariable Long transactionid){
+        ConsultTransactionRequest request= new ConsultTransactionRequest();
+        request.setTransactionId(transactionid);
+        return ResponseEntity.ok(consultTransaction.checkTrnsaction(request));
+    }
+
+    @PostMapping("/transaction/anulation")
+    public ResponseEntity<AnulationTransactionResponse> anulacion (  @RequestBody AnulationTransactionRequest  request ){
+        return ResponseEntity.ok(anulacionTrans.anulationTrnas(request));
+
     }
 }

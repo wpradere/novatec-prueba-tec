@@ -30,7 +30,7 @@ public class ActivateCardService implements IActivateCard {
     private final TransactionRepository transactionRepository;
     public ActivateCardResponse activarCard(ActivateCardRequest request) {
         ActivateCardResponse response = new ActivateCardResponse();
-        var cardActivate = creditCardRepository.findByIdCardActivation(request.getIdCardActivation()).orElseThrow(()->new IdNotFoundExceptions("Customer"));
+        var cardActivate = creditCardRepository.findByIdCardActivation(request.getIdCardActivation()).orElseThrow(()->new IdNotFoundExceptions("Tarjeta"));
 
 
         if ( cardActivate.isActive()==false){
