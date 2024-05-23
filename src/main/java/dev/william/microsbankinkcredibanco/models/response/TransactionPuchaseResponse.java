@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @Builder
 
 public class TransactionPuchaseResponse {
+    private String idCardActivation;
     private Long transactionId;
     private BigDecimal valueTransaction;
     private LocalDate createAt;

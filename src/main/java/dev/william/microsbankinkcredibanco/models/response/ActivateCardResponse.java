@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @Builder
 public class ActivateCardResponse {
 
+    private String idCardActivation;
     private String active;
     private LocalDate createAt;
     private String message;

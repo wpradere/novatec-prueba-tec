@@ -69,6 +69,7 @@ public class TransacionPuchaseService implements ITransactionPuchase{
             response.setTransactionId(transactionPersist.getTransactionId());
             response.setNewBalance(cardTransaction.getBalance());
             response.setMessage("The transaction was  successful  ");
+            response.setIdCardActivation(cardTransaction.getIdCardActivation());
         }
         return response;
     }

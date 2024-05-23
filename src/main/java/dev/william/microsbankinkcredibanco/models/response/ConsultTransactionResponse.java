@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 
 public class ConsultTransactionResponse {
+    private Long transactionId;
     private TypeTransaction typeTransaction;
     private String descriptionTransaction;
     private BigDecimal valueTransaction;

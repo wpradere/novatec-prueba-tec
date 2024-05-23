@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @Builder
 
 public class CheckBalanceResponse {
+    private Long productId;
     private BigDecimal balance;
     private String idCardActivation;
 }

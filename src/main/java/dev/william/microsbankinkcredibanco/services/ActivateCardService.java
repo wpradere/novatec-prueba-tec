@@ -28,7 +28,7 @@ public class ActivateCardService implements IActivateCard {
 
     private final CreditCardRepository creditCardRepository;
     private final TransactionRepository transactionRepository;
-    public ActivateCardResponse activarCard(ActivateCardRequest request) {
+    public  ActivateCardResponse activarCard(ActivateCardRequest request) {
         ActivateCardResponse response = new ActivateCardResponse();
         var cardActivate = creditCardRepository.findByIdCardActivation(request.getIdCardActivation()).orElseThrow(()->new IdNotFoundExceptions("Tarjeta"));
 
@@ -48,18 +48,12 @@ public class ActivateCardService implements IActivateCard {
                     response.setCreateAt(cardActivate.getCreateAt());
                     response.setActive("true");
                     response.setMessage("The card was active succesfull !!!!");
+                    response.setIdCardActivation(cardActivate.getIdCardActivation());
         }else{
             response.setMessage("The card  was not activated ");
         }
         return response;
     }
-
-    private ActivateCardResponse entityToResponse(CreditCardEntity entity){
-        var response = new ActivateCardResponse();
-        BeanUtils.copyProperties(entity,response);
-        return response;
-    }
-
 
 
 }
