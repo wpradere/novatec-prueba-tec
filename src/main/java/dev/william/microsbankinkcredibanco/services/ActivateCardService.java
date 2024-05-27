@@ -30,14 +30,14 @@ public class ActivateCardService implements IActivateCard {
     private final TransactionRepository transactionRepository;
     public  ActivateCardResponse activarCard(ActivateCardRequest request) {
         ActivateCardResponse response = new ActivateCardResponse();
-        var cardActivate = creditCardRepository.findByIdCardActivation(request.getIdCardActivation()).orElseThrow(()->new IdNotFoundExceptions("Tarjeta"));
+        var cardActivate = creditCardRepository.findByIdCardActivation(request.getIdCardActivation()).orElseThrow(()->new IdNotFoundExceptions("Card"));
 
 
         if ( cardActivate.isActive()==false){
             cardActivate.setActive(true);
             var transactionPersist = TransactionEntity.builder()
                     .typeTransaction(TypeTransaction.Activar_Tarjeta)
-                    .descriptionTransaction("The card is activate succesfull !!! ")
+                    .descriptionTransaction("The card is Create succesfull !!! ")
                     .stateTransaccion(CreditCardProcess.sucess)
                     .valueTransaction(BigDecimal.ZERO)
                     .createAt(LocalDateTime.now())
@@ -47,10 +47,13 @@ public class ActivateCardService implements IActivateCard {
                     this.transactionRepository.save(transactionPersist);
                     response.setCreateAt(cardActivate.getCreateAt());
                     response.setActive("true");
-                    response.setMessage("The card was active succesfull !!!!");
+                    response.setMessage("The card was Create succesfull !!!!");
                     response.setIdCardActivation(cardActivate.getIdCardActivation());
         }else{
-            response.setMessage("The card  was not activated ");
+            response.setIdCardActivation(cardActivate.getIdCardActivation());
+            response.setActive("true");
+            response.setCreateAt(cardActivate.getCreateAt());
+            response.setMessage("The card  was not Create ");
         }
         return response;
     }

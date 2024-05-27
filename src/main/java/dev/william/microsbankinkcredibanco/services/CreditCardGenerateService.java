@@ -33,11 +33,12 @@ public class CreditCardGenerateService implements ICreditCardGenerate {
 
     @Override
     public AssignedCardResponse activar(AssignedCardRequest request) {
-        var cardActive = creditCardRepository.findById(request.getProductId()).orElseThrow(()->new IdNotFoundExceptions("Customer"));
+        var cardActive = creditCardRepository.findById(request.getProductId()).orElseThrow(()->new IdNotFoundExceptions("Card"));
         AssignedCardResponse responseChangeState = new AssignedCardResponse();
         LocalDate fechaVencimiento = LocalDate.now().plusYears(3);
         if (cardActive.isActive()==true){
-            responseChangeState.setMessasge("This card is aready acitvate ");
+            responseChangeState.setMessasge("This card is  acitvate ");
+            TransactionProses(cardActive,responseChangeState.getMessasge());
         }else {
             if (cardActive.getIdCardActivation()== null){
                     String processed=  fechaVencimiento.getMonth().getValue()+"/"+ fechaVencimiento.getYear();
@@ -55,30 +56,39 @@ public class CreditCardGenerateService implements ICreditCardGenerate {
                     cardActive.setActive(false);
                     cardActive.setIdCardActivation(idActivate);
                     cardActive.setCreateAt(LocalDate.now());
-                    var transactionPersist = TransactionEntity.builder()
-                            .typeTransaction(TypeTransaction.Activar_Tarjeta)
-                            .descriptionTransaction("The card is activate succesfull !!! ")
-                            .stateTransaccion(CreditCardProcess.sucess)
-                            .valueTransaction(BigDecimal.ZERO)
-                            .createAt(LocalDateTime.now())
-                            .idCustomer(cardActive.getCustomer().getDni())
-                            .idCreditCard(cardActive.getProductId())
-                            .build();
-                    this.transactionRepository.save(transactionPersist);
                     responseChangeState.setIdCardActivation(cardActive.getIdCardActivation());
                     responseChangeState.setMessasge("The number of Cars already assigned ");
+                    TransactionProses(cardActive,responseChangeState.getMessasge());
+            }else {
+                responseChangeState.setIdCardActivation(cardActive.getIdCardActivation());
+                responseChangeState.setMessasge("The number of Cars was  assigned bad transaction ");
+                TransactionProses(cardActive,responseChangeState.getMessasge());
             }
+
         }
-
-
         this.creditCardRepository.save(cardActive);
         return responseChangeState;
-
     }
 
     private AssignedCardResponse entityToResponse(CreditCardEntity entity){
         var response = new AssignedCardResponse();
         BeanUtils.copyProperties(entity,response);
         return response;
+    }
+
+
+    private  void TransactionProses ( CreditCardEntity  cardActive , String message  ){
+
+        var transactionPersist = TransactionEntity.builder()
+                .typeTransaction(TypeTransaction.Activar_Tarjeta)
+                .descriptionTransaction(message)
+                .stateTransaccion(CreditCardProcess.sucess)
+                .valueTransaction(BigDecimal.ZERO)
+                .createAt(LocalDateTime.now())
+                .idCustomer(cardActive.getCustomer().getDni())
+                .idCreditCard(cardActive.getProductId())
+                .build();
+        this.transactionRepository.save(transactionPersist);
+
     }
 }

@@ -4,6 +4,7 @@ package dev.william.microsbankinkcredibanco.controller;
 import dev.william.microsbankinkcredibanco.models.request.*;
 import dev.william.microsbankinkcredibanco.models.response.*;
 import dev.william.microsbankinkcredibanco.services.*;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -26,12 +27,12 @@ public class CreditCardController {
     private final IAnulaTrans anulacionTrans;
 
     @GetMapping("/create")
-    public ResponseEntity<GenerateCardResponse> insertar (@RequestBody GenerateCardRequest request/*,@PathVariable Long productId*/){
+    public ResponseEntity<GenerateCardResponse> insertar ( @Valid @RequestBody GenerateCardRequest request/*,@PathVariable Long productId*/){
         return ResponseEntity.ok(creditcard.crearTarjeta(request));
     }
 
     @GetMapping("/{productId}/number")
-    public ResponseEntity<AssignedCardResponse> asignar (@PathVariable Long productId){
+    public ResponseEntity<AssignedCardResponse> asignar ( @PathVariable Long productId){
         AssignedCardRequest request = new AssignedCardRequest();
         request.setProductId(productId);
         return ResponseEntity.ok(creditCardActivation.activar(request));
