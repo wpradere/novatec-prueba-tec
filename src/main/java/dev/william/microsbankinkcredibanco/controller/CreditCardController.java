@@ -39,7 +39,7 @@ public class CreditCardController {
     }
 
     @PostMapping("/enroll")
-    public ResponseEntity<ActivateCardResponse> actiCard (@RequestBody ActivateCardRequest request ){
+    public ResponseEntity<ActivateCardResponse> actiCard (@Valid @RequestBody ActivateCardRequest request ){
         return ResponseEntity.ok(activateCard.activarCard(request));
 
     }
@@ -52,7 +52,7 @@ public class CreditCardController {
     }
 
     @PostMapping("/balance")
-    public ResponseEntity<ChargeCardResponse>cargarBalance( @RequestBody ChargeCardRequest request){
+    public ResponseEntity<ChargeCardResponse>cargarBalance(@Valid @RequestBody ChargeCardRequest request){
         return ResponseEntity.ok(chargeCardService.cargarTarjeta(request));
     }
 
@@ -64,7 +64,7 @@ public class CreditCardController {
     }
 
     @PostMapping("/transaction/puchase")
-    public ResponseEntity<TransactionPuchaseResponse> activateC ( @RequestBody TransactionPuchaseRequest  request ){
+    public ResponseEntity<TransactionPuchaseResponse> activateC (@Valid @RequestBody TransactionPuchaseRequest  request ){
     return ResponseEntity.ok(transactionPuchase.createTransaction(request));
     }
     @GetMapping("/transaction/{transactionid}")
@@ -75,7 +75,7 @@ public class CreditCardController {
     }
 
     @PostMapping("/transaction/anulation")
-    public ResponseEntity<AnulationTransactionResponse> anulacion (  @RequestBody AnulationTransactionRequest  request ){
+    public ResponseEntity<AnulationTransactionResponse> anulacion ( @Valid @RequestBody AnulationTransactionRequest  request ){
         return ResponseEntity.ok(anulacionTrans.anulationTrnas(request));
 
     }
