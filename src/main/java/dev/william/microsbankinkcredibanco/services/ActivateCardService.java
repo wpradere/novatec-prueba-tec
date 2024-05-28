@@ -3,7 +3,6 @@ package dev.william.microsbankinkcredibanco.services;
 import dev.william.microsbankinkcredibanco.entities.CreditCardEntity;
 import dev.william.microsbankinkcredibanco.entities.TransactionEntity;
 import dev.william.microsbankinkcredibanco.models.repository.CreditCardRepository;
-import dev.william.microsbankinkcredibanco.models.repository.CustomerRepository;
 import dev.william.microsbankinkcredibanco.models.repository.TransactionRepository;
 import dev.william.microsbankinkcredibanco.models.request.ActivateCardRequest;
 import dev.william.microsbankinkcredibanco.models.response.ActivateCardResponse;
@@ -35,27 +34,35 @@ public class ActivateCardService implements IActivateCard {
 
         if ( cardActivate.isActive()==false){
             cardActivate.setActive(true);
-            var transactionPersist = TransactionEntity.builder()
-                    .typeTransaction(TypeTransaction.Activar_Tarjeta)
-                    .descriptionTransaction("The card is Create succesfull !!! ")
-                    .stateTransaccion(CreditCardProcess.sucess)
-                    .valueTransaction(BigDecimal.ZERO)
-                    .createAt(LocalDateTime.now())
-                    .idCustomer(cardActivate.getCustomer().getDni())
-                    .idCreditCard(cardActivate.getProductId())
-                    .build();
-                    this.transactionRepository.save(transactionPersist);
+
                     response.setCreateAt(cardActivate.getCreateAt());
                     response.setActive("true");
                     response.setMessage("The card was Create succesfull !!!!");
                     response.setIdCardActivation(cardActivate.getIdCardActivation());
+                    TransactionProses(cardActivate,response.getMessage());
         }else{
             response.setIdCardActivation(cardActivate.getIdCardActivation());
             response.setActive("true");
             response.setCreateAt(cardActivate.getCreateAt());
             response.setMessage("The card  was not Create ");
+            TransactionProses(cardActivate,response.getMessage());
         }
         return response;
+    }
+
+    private  void TransactionProses ( CreditCardEntity  cardActive , String message  ){
+
+        var transactionPersist = TransactionEntity.builder()
+                .typeTransaction(TypeTransaction.Activar_Tarjeta)
+                .descriptionTransaction(message)
+                .stateTransaccion(CreditCardProcess.sucess)
+                .valueTransaction(BigDecimal.ZERO)
+                .createAt(LocalDateTime.now())
+                .idCustomer(cardActive.getCustomer().getDni())
+                .idCreditCard(cardActive.getProductId())
+                .build();
+        this.transactionRepository.save(transactionPersist);
+
     }
 
 

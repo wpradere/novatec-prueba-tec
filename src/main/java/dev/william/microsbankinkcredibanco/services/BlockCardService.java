@@ -1,5 +1,6 @@
 package dev.william.microsbankinkcredibanco.services;
 
+import dev.william.microsbankinkcredibanco.entities.CreditCardEntity;
 import dev.william.microsbankinkcredibanco.entities.TransactionEntity;
 import dev.william.microsbankinkcredibanco.models.repository.CreditCardRepository;
 import dev.william.microsbankinkcredibanco.models.repository.TransactionRepository;
@@ -32,20 +33,26 @@ public class BlockCardService implements IBlockCard {
     public BlockCardResponse blockCard(BlockCardRequest request) {
         BlockCardResponse response = new BlockCardResponse();
         var cardBlock = creditCardRepository.findById(request.getProductId()).orElseThrow(()->new IdNotFoundExceptions("Card"));
-        var transactionPersist = TransactionEntity.builder()
-                .typeTransaction(TypeTransaction.Activar_Tarjeta)
-                .descriptionTransaction("The card is delete succesfull !!! ")
-                .stateTransaccion(CreditCardProcess.sucess)
-                .valueTransaction(BigDecimal.ZERO)
-                .createAt(LocalDateTime.now())
-                .idCustomer(cardBlock.getCustomer().getDni())
-                .idCreditCard(cardBlock.getProductId())
-                .build();
-                this.transactionRepository.save(transactionPersist);
                 this.creditCardRepository.delete(cardBlock);
                 response.setIdProduct(request.getProductId());
                 response.setMesssage("The Card Was delete succesfull ");
+                TransactionProses(cardBlock,response.getMesssage());
+                return response;
+    }
 
-        return response;
+
+    private  void TransactionProses (CreditCardEntity cardActive , String message  ){
+
+        var transactionPersist = TransactionEntity.builder()
+                .typeTransaction(TypeTransaction.Activar_Tarjeta)
+                .descriptionTransaction(message)
+                .stateTransaccion(CreditCardProcess.sucess)
+                .valueTransaction(BigDecimal.ZERO)
+                .createAt(LocalDateTime.now())
+                .idCustomer(cardActive.getCustomer().getDni())
+                .idCreditCard(cardActive.getProductId())
+                .build();
+        this.transactionRepository.save(transactionPersist);
+
     }
 }

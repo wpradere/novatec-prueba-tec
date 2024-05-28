@@ -33,7 +33,7 @@ public class CheckBalanceService implements ICheckBlance {
 
         var balanceCheck = creditCardRepository.findById(request.getProductId()).orElseThrow(()-> new IdNotFoundExceptions("Balance Check"));
         var transactionPersist = TransactionEntity.builder()
-                .typeTransaction(TypeTransaction.Activar_Tarjeta)
+                .typeTransaction(TypeTransaction.Consulta_saldo)
                 .descriptionTransaction("The card balances consult is  succesfull !!! ")
                 .stateTransaccion(CreditCardProcess.sucess)
                 .valueTransaction(BigDecimal.ZERO)
