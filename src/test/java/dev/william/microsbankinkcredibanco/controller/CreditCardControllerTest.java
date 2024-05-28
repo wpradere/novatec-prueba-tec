@@ -2,10 +2,8 @@ package dev.william.microsbankinkcredibanco.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.william.microsbankinkcredibanco.models.request.ActivateCardRequest;
-import dev.william.microsbankinkcredibanco.models.request.AnulationTransactionRequest;
-import dev.william.microsbankinkcredibanco.models.request.ChargeCardRequest;
-import dev.william.microsbankinkcredibanco.models.request.TransactionPuchaseRequest;
+import dev.william.microsbankinkcredibanco.models.request.*;
+import dev.william.microsbankinkcredibanco.util.TypeCard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -28,11 +25,15 @@ import static org.junit.jupiter.api.Assertions.*;
 class CreditCardControllerTest {
 
     private final static String URL_ACTIVATE="/card/enroll";
-    private final static String URL_ASIGNAR="card/{productId}/number";
+    private final static String URL_ASIGNAR="/card/888552/number";
 
     private final static String URL_CHANGECARD="/card/balance";
     private final static String URL_TRANSACTION="/card/transaction/puchase";
     private final static String URL_TRANSACTION_ANULATION="/card/transaction/anulation";
+    private final static String URL_BlOQUEAR="/888552/";
+    private final static String URL_CHECKBALANCE="/card/balance/887997";
+    private final static String URL_CHECKTRANSACTION="/card/transaction/30";
+    private final static String URL_CAEDCREATE="/card/create";
 
     MockMvc mockMvc;
 
@@ -47,8 +48,24 @@ class CreditCardControllerTest {
     }
 
     @Test
+    void insertar () throws Exception {
+        GenerateCardRequest request = buildRequest4();
+
+
+        MvcResult mockMvcResulta = mockMvc.perform(MockMvcRequestBuilders.get(URL_CAEDCREATE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE).content(mapJson(request)))
+                .andReturn();
+        assertEquals(400,mockMvcResulta.getResponse().getStatus());
+
+    }
+
+
+
+    @Test
     void asignar() throws Exception {
-        MvcResult mockMvcResulta = mockMvc.perform(MockMvcRequestBuilders.get(URL_ACTIVATE)
+        MvcResult mockMvcResulta = mockMvc.perform(MockMvcRequestBuilders.get(URL_ASIGNAR)
+
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
         assertEquals(200,mockMvcResulta.getResponse().getStatus());
@@ -57,6 +74,7 @@ class CreditCardControllerTest {
 
     @Test
     void actiCard() throws Exception {
+
         ActivateCardRequest request = buildRequest();
         MvcResult mockMvcResulta = mockMvc.perform(MockMvcRequestBuilders.post(URL_ACTIVATE)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -66,22 +84,35 @@ class CreditCardControllerTest {
     }
 
     @Test
-    void bloquear() {
+    void bloquear() throws Exception {
+
+        MvcResult mockMvcResulta = mockMvc.perform(MockMvcRequestBuilders.get(URL_BlOQUEAR)
+
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn();
+        assertEquals(200,mockMvcResulta.getResponse().getStatus());
     }
 
     @Test
     void cargarBalance() throws Exception {
         ChargeCardRequest request = buildRequest1();
 
+
         MvcResult mockMvcResulta = mockMvc.perform(MockMvcRequestBuilders.post(URL_CHANGECARD)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON_VALUE).content(mapJson(request)))
                 .andReturn();
         assertEquals(200,mockMvcResulta.getResponse().getStatus());
+
+
     }
 
     @Test
-    void checkBalance() {
+    void checkBalance() throws Exception {
+        MvcResult mockMvcResulta = mockMvc.perform(MockMvcRequestBuilders.get(URL_CHECKBALANCE)
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                        .andReturn();
+        assertEquals(200,mockMvcResulta.getResponse().getStatus());
     }
 
     @Test
@@ -97,13 +128,17 @@ class CreditCardControllerTest {
     }
 
     @Test
-    void checkTrnasaction() {
+    void checkTrnasaction() throws Exception {
+        MvcResult mockMvcResulta = mockMvc.perform(MockMvcRequestBuilders.get(URL_CHECKTRANSACTION)
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                        .andReturn();
+        assertEquals(200,mockMvcResulta.getResponse().getStatus());
+
     }
 
     @Test
     void anulacion() throws Exception {
         AnulationTransactionRequest request = buildRequest3();
-
         MvcResult mockMvcResulta = mockMvc.perform(MockMvcRequestBuilders.post(URL_TRANSACTION_ANULATION)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON_VALUE).content(mapJson(request)))
@@ -147,6 +182,16 @@ class CreditCardControllerTest {
                 AnulationTransactionRequest.builder()
                         .idCardActivation("8885521389396885")
                         .transactionId(24L)
+                        .build();
+        return request;
+    }
+
+    private GenerateCardRequest buildRequest4(){
+        GenerateCardRequest request =
+                GenerateCardRequest.builder()
+                        .productId(125522L)
+                        .typeCreditCard(TypeCard.debito)
+                        .customerid("")
                         .build();
         return request;
     }
