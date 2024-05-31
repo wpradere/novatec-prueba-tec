@@ -30,7 +30,7 @@ class CreditCardControllerTest {
     private final static String URL_CHANGECARD="/card/balance";
     private final static String URL_TRANSACTION="/card/transaction/puchase";
     private final static String URL_TRANSACTION_ANULATION="/card/transaction/anulation";
-    private final static String URL_BlOQUEAR="/888552/";
+    private final static String URL_BlOQUEAR="/card/100001";
     private final static String URL_CHECKBALANCE="/card/balance/887997";
     private final static String URL_CHECKTRANSACTION="/card/transaction/30";
     private final static String URL_CAEDCREATE="/card/create";
@@ -86,10 +86,9 @@ class CreditCardControllerTest {
     @Test
     void bloquear() throws Exception {
 
-        MvcResult mockMvcResulta = mockMvc.perform(MockMvcRequestBuilders.get(URL_BlOQUEAR)
-
+        MvcResult mockMvcResulta = mockMvc.perform(MockMvcRequestBuilders.delete(URL_BlOQUEAR)
                         .accept(MediaType.APPLICATION_JSON_VALUE))
-                .andReturn();
+                        .andReturn();
         assertEquals(200,mockMvcResulta.getResponse().getStatus());
     }
 

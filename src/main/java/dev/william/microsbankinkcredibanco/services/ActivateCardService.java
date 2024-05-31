@@ -11,7 +11,6 @@ import dev.william.microsbankinkcredibanco.util.TypeTransaction;
 import dev.william.microsbankinkcredibanco.util.exceptions.IdNotFoundExceptions;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,30 +26,28 @@ public class ActivateCardService implements IActivateCard {
 
     private final CreditCardRepository creditCardRepository;
     private final TransactionRepository transactionRepository;
-    public  ActivateCardResponse activarCard(ActivateCardRequest request) {
+
+    public ActivateCardResponse activarCard(ActivateCardRequest request) {
         ActivateCardResponse response = new ActivateCardResponse();
-        var cardActivate = creditCardRepository.findByIdCardActivation(request.getIdCardActivation()).orElseThrow(()->new IdNotFoundExceptions("Card"));
+        var cardActivate = creditCardRepository.findByIdCardActivation(request.getIdCardActivation()).orElseThrow(() -> new IdNotFoundExceptions("Card"));
 
-
-        if ( cardActivate.isActive()==false){
+        if (cardActivate.isActive() == false) {
             cardActivate.setActive(true);
-
-                    response.setCreateAt(cardActivate.getCreateAt());
-                    response.setActive("true");
-                    response.setMessage("The card was Create succesfull !!!!");
-                    response.setIdCardActivation(cardActivate.getIdCardActivation());
-                    TransactionProses(cardActivate,response.getMessage());
-        }else{
-            response.setIdCardActivation(cardActivate.getIdCardActivation());
-            response.setActive("true");
             response.setCreateAt(cardActivate.getCreateAt());
-            response.setMessage("The card  was not Create ");
-            TransactionProses(cardActivate,response.getMessage());
+            response.setActive("true");
+            response.setMessage("The card was Activate succesfull !!!!");
+            response.setIdCardActivation(cardActivate.getIdCardActivation());
+            TransactionProses(cardActivate, response.getMessage());
+        } else {
+            response.setIdCardActivation(cardActivate.getIdCardActivation());
+            response.setCreateAt(cardActivate.getCreateAt());
+            response.setMessage("the card has already been activated ");
+            TransactionProses(cardActivate, response.getMessage());
         }
         return response;
     }
 
-    private  void TransactionProses ( CreditCardEntity  cardActive , String message  ){
+    private void TransactionProses(CreditCardEntity cardActive, String message) {
 
         var transactionPersist = TransactionEntity.builder()
                 .typeTransaction(TypeTransaction.Activar_Tarjeta)

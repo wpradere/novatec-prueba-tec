@@ -17,6 +17,7 @@ public class GenerateCardRequest {
     @Min(value = 100000, message = "Min value is  6 digits ")
     @Max(value =999999, message = "max value was 6 digits")
     private Long productId;
+
     private TypeCard typeCreditCard;
     @NotBlank(message = "customerid is mandatory ")
     private String customerid;
